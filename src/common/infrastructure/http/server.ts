@@ -1,8 +1,15 @@
 import { app } from './app'
 import { env } from '../env'
-const port = 3333
+import { dataSource } from '../typeorm'
 
-app.listen(env.PORT, () => {
-  console.log(`Server is running on port ${env.PORT}`)
-  console.log('API docs available on http://localhost:3333/api-docs')
-})
+dataSource
+  .initialize()
+  .then(() => {
+    app.listen(env.PORT, () => {
+      console.log(`Server is running on port ${env.PORT}`)
+      console.log('API docs available on http://localhost:3333/api-docs')
+    })
+  })
+  .catch(error => {
+    console.error('Error during Data Source initialization', error)
+  })
